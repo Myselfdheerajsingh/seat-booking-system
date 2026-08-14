@@ -12,7 +12,7 @@ Usage:
 import threading
 import requests
 
-API_URL = "http://localhost:8000"
+API_URL = "https://seat-booking-system-7p0z.onrender.com"
 EVENT_ID = 1
 SEAT_ID = 1  # pick a seat id from GET /events/{EVENT_ID}/seats
 
