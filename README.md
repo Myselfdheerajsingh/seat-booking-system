@@ -8,6 +8,19 @@ double-booking. Built for the NeuBitAt technical assignment.
 
 ---
 
+## Live Demo
+
+- **Frontend (app):** https://seatbooking-waze.onrender.com/
+- **Backend API docs (Swagger):** https://seat-booking-system-7p0z.onrender.com/docs
+- **GitHub repo:** https://github.com/Myselfdheerajsingh/seat-booking-system
+
+> Note: both services run on Render's free tier and may take 30–60s to
+> wake up if idle. The database (Aiven, free tier) also auto-pauses on
+> inactivity — if the app shows a connection error on first load, wait
+> a minute and refresh; it wakes automatically on the next request.
+
+---
+
 ## 1. Setup
 
 ### Database
@@ -22,7 +35,7 @@ Tables are created automatically on backend startup (`Base.metadata.create_all`)
 
 ```bash
 cd backend
-python -m venv .venv && source .venv/bin/activate   # or .venv\Scripts\activate on Windows
+python -m venv venv && source venv/bin/activate   # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 cp .env.example .env   # fill in DATABASE_URL with your MySQL credentials
 uvicorn app.main:app --reload
@@ -128,11 +141,16 @@ is partially booked. The API reports which seats were the problem.
 **Demonstrating it:** `backend/test_concurrency.py` fires two booking
 requests for the same seat from two threads at nearly the same instant and
 asserts exactly one succeeds (`201`) and the other is rejected (`409`).
+This has been run against the **live deployment**, not just locally — one
+request returns `201`, the other `409 Conflict` naming the contested seat.
 
 ```bash
 cd backend
 python test_concurrency.py
 ```
+
+(Edit `API_URL`, `EVENT_ID`, and `SEAT_ID` at the top of the script to
+point at your own running instance and an available seat.)
 
 ---
 
@@ -165,3 +183,10 @@ python test_concurrency.py
   not the poll).
 - No pagination on the events or bookings lists — fine at assignment scale,
   would need it for a large number of events/bookings in production.
+- Frontend is deployed on Render rather than Vercel (the backend hosting
+  choice explicitly allows "Render/Railway or similar"; Render was used for
+  both services here for consistency). Functionally identical to a Vercel
+  deployment for this app.
+- Both hosting services (Render) and the database (Aiven) are on free
+  tiers, which auto-sleep/auto-pause after a period of inactivity. The
+  first request after idling may take 30–60s.
