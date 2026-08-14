@@ -12,9 +12,9 @@ Usage:
 import threading
 import requests
 
-API_URL = "https://seatbooking-waze.onrender.com/"
-EVENT_ID = 1  # your test event's id
-SEAT_ID = 1   # any seat that exists and isn't already booked
+API_URL = "http://localhost:8000"
+EVENT_ID = 1
+SEAT_ID = 1  # pick a seat id from GET /events/{EVENT_ID}/seats
 
 results = []
 
