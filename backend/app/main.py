@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from . import crud, models, schemas
 from .database import engine, get_db
 
+print("DEBUG DATABASE_URL:", os.getenv("DATABASE_URL"))
+print("DEBUG DB_SSL_REQUIRED:", os.getenv("DB_SSL_REQUIRED"))
 
 models.Base.metadata.create_all(bind=engine)
 
