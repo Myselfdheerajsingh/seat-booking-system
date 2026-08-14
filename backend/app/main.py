@@ -7,6 +7,9 @@ from sqlalchemy.orm import Session
 from . import crud, models, schemas
 from .database import engine, get_db
 
+print("DEBUG DATABASE_URL:", os.getenv("DATABASE_URL"))
+print("DEBUG DB_SSL_REQUIRED:", os.getenv("DB_SSL_REQUIRED"))
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="NeuBitAt Seat Booking API")
@@ -76,8 +79,6 @@ def create_booking(booking: schemas.BookingCreate, db: Session = Depends(get_db)
     try:
         new_bookings = crud.create_booking(db, booking)
     except crud.SeatUnavailableError as e:
-        # 409 Conflict, not a generic 500 or a silent 200 — the whole
-        # request fails together (all-or-nothing), nothing is partially booked.
         raise HTTPException(
             status_code=409,
             detail=f"The following seats are no longer available: {', '.join(e.labels)}",
